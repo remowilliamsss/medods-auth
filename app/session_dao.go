@@ -33,9 +33,12 @@ func (dao *SessionDAO) FindById(ctx context.Context, uuid *uuid.UUID) (*Session,
 
 func (dao *SessionDAO) Update(ctx context.Context, session *Session) error {
 	filter := bson.D{{"_id", session.UUID}}
-	_, err := dao.collection.ReplaceOne(ctx, filter, session)
+	updateResult, err := dao.collection.ReplaceOne(ctx, filter, session)
 	if err != nil {
 		return err
+	}
+	if updateResult.MatchedCount == 0 {
+		return ErrNotFound
 	}
 	return nil
 }

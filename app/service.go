@@ -19,10 +19,6 @@ func NewService(dao *SessionDAO, jwt *JWT) *Service {
 }
 
 func (s *Service) Auth(ctx context.Context, uuid *uuid.UUID) (*TokenPair, error) {
-	_, err := s.dao.FindById(ctx, uuid)
-	if err != nil {
-		return nil, err
-	}
 	accessToken, err := s.jwt.GenerateAccessToken(uuid)
 	if err != nil {
 		return nil, err
